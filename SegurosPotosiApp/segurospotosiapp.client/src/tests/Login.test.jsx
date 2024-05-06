@@ -6,15 +6,17 @@ import { Provider } from 'react-redux';
 
 afterEach(cleanup);
 
-it('render App', () => {
+describe('Login tests', () => {
+  it('render App', () => {
     const updateUserLogged = jest.fn();
     const handleClose = jest.fn();
     const show = true;
-  render(
-    <Provider store={store}>
-      <Login handleClose={handleClose} show={show} updateUserLogged={updateUserLogged} />
-    </Provider>
-  );
-  const titleElement = screen.getByText('Login');
-  expect(titleElement).toBeInTheDocument();
+    render(
+      <Provider store={store}>
+        <Login handleClose={handleClose} show={show} updateUserLogged={updateUserLogged} />
+      </Provider>
+    );
+    const titleElement = screen.getByText('Login');
+    expect(titleElement).toBeInTheDocument();
+  });
 });
