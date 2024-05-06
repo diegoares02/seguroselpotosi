@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using SegurosPotosiLibrary.Interfaces;
+using SegurosPotosiLibrary.Models;
 using SegurosPotosiLibrary.SegurosDbContext;
 
 namespace SegurosPotosiApp.Server
@@ -20,8 +26,30 @@ namespace SegurosPotosiApp.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SegurosPotosiContext>(options =>
-                options.UseInMemoryDatabase("SegurosPotosi"));
+            services.AddSingleton<IUser, User>();
+            services.AddSingleton<IBook, Book>();
+            services.AddSingleton<IAuthor, Author>();
+
+            services.AddDbContext<SegurosPotosiContext>(options => options.UseInMemoryDatabase("SegurosPotosi"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "segurospotosi123456Test",
+                        ValidAudience = "segurospotosi123456Test",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("segurospotosi123456Test")),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
             services.AddControllers();
             services.AddCors(options =>
             {
@@ -45,6 +73,8 @@ namespace SegurosPotosiApp.Server
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRouting();
 

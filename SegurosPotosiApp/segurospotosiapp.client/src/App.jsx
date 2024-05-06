@@ -1,53 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Container, Table } from 'react-bootstrap'
-import axios from 'axios';
-import './App.css';
+import { useState } from 'react';
+import { Container } from 'react-bootstrap';
+import Login from './login/LoginComponent';
+import NavBarComponent from './navbar/NavBarComponent';
 
 function App() {
-    const [forecasts, setForecasts] = useState();
+  const [show, setShow] = useState(false);
+  const [emailUser, setEmailUser] = useState('');
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const updateUserLogged = (user) => setEmailUser(user);
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+  const navbar = <NavBarComponent handleShow={handleShow} emailUser={emailUser}></NavBarComponent>;
+  const login = (
+    <Login handleClose={handleClose} show={show} updateUserLogged={updateUserLogged}></Login>
+  );
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </Table>;
-
-    return (
-        <Container fluid>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            {contents}
-        </Container>
-    );
-
-    async function populateWeatherData() {
-        axios.get(`https://localhost:44343/weatherforecast`, {
-            mode: 'no-cors'
-        })
-            .then(res => {
-                setForecasts(res.data);
-            });
-    }
+  return (
+    <Container fluid>
+      {navbar}
+      {login}
+    </Container>
+  );
 }
 
 export default App;
