@@ -7,6 +7,9 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
 
+export const AUTHOR_CREATE = 'AUTHOR_CREATE';
+export const AUTHOR_LIST = 'AUTHOR_LIST';
+
 export const URL = 'https://localhost:44343';
 // Action Creators
 const loginRequest = () => {
@@ -32,6 +35,20 @@ const loginFailure = (error) => {
 const logoutRequest = (data) => {
   return {
     type: LOGOUT,
+    payload: data
+  };
+};
+
+const authorCreate = (data) => {
+  return {
+    type: AUTHOR_CREATE,
+    payload: data
+  };
+};
+
+const authorList = (data) => {
+  return {
+    type: AUTHOR_LIST,
     payload: data
   };
 };
@@ -80,5 +97,43 @@ export const logout = () => {
       status: false
     };
     dispatch(logoutRequest(result));
+  };
+};
+
+export const createAuthor = (data) => {
+  return (dispatch) => {
+    axios
+      .post(`${URL}/author`, data, {
+        headers: {
+          mode: 'no-cors',
+          'content-type': 'application/json'
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        dispatch(authorCreate(data));
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error.message));
+      });
+  };
+};
+export const listAuthor = () => {
+  return (dispatch) => {
+    axios
+      .get(`${URL}/author`, {
+        headers: {
+          mode: 'no-cors',
+          'content-type': 'application/json'
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        dispatch(authorList(data));
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error.message));
+      });
   };
 };

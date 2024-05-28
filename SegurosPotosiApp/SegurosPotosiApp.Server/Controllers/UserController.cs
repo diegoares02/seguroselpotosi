@@ -14,22 +14,22 @@ namespace SegurosPotosiApp.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUser _user;
         public UserController(IUser user, SegurosPotosiContext context)
         {
             _user = user;
-            _user.SetContext(context);
-            DataSeed.Seed(context);
+            user.SetContext(context);
         }
         [HttpGet]
-        [Authorize]
         public string Index()
         {
             return JsonSerializer.Serialize(_user.GetUsers());
         }
         [HttpPost("/user/login")]
+        [AllowAnonymous]
         public string Login([FromBody] User user)
         {
             if (_user.Login(user))

@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
+import NavLink from './NavLink';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/actions';
 
@@ -25,24 +26,18 @@ function NavBarComponent(props) {
       </Button>
     ) : (
       <div>
-        Bienvenido {userLoginData && userLoginData.user} {logoutButton}
+        {userLoginData && userLoginData.user} {logoutButton}
       </div>
     );
   const options =
     userLoginData && userLoginData.status ? (
       <Nav className="me-auto">
-        <Nav.Link variant="outline-success" onClick={props.handleAuthorShow}>
-          Autor
-        </Nav.Link>
-        <Nav.Link variant="outline-success" onClick={props.handleBookShow}>
-          Libro
-        </Nav.Link>
-        <Nav.Link variant="outline-success" onClick={props.handleBorrowShow}>
-          Prestamo
-        </Nav.Link>
-        <Nav.Link variant="outline-success" onClick={props.handleReturnShow}>
-          Devolucion
-        </Nav.Link>
+        <NavLink to="/authors" href="/authors">
+          Authors
+        </NavLink>
+        <NavLink to="/authors">Books</NavLink>
+        <NavLink to="/authors">Borrows</NavLink>
+        <NavLink to="/authors">Returns</NavLink>
       </Nav>
     ) : (
       ''
@@ -50,7 +45,7 @@ function NavBarComponent(props) {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="">Seguros El Potosi</Navbar.Brand>
+        <Navbar.Brand href="/">Seguros El Potosi</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           {options}

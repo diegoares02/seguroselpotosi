@@ -1,9 +1,17 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from './actions';
+import {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT,
+  AUTHOR_CREATE,
+  AUTHOR_LIST
+} from './actions';
 
 const loginInitialState = {
   data: null,
   isLoading: false,
-  error: null
+  error: null,
+  authors: null
 };
 
 const reducer = (state = loginInitialState, action) => {
@@ -30,6 +38,20 @@ const reducer = (state = loginInitialState, action) => {
       return {
         ...state,
         data: action.payload,
+        isLoading: false,
+        error: null
+      };
+    case AUTHOR_CREATE:
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        error: null
+      };
+    case AUTHOR_LIST:
+      return {
+        ...state,
+        authors: action.payload,
         isLoading: false,
         error: null
       };

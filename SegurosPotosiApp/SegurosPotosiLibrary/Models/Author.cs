@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SegurosPotosiLibrary.Base;
 using SegurosPotosiLibrary.Interfaces;
 using SegurosPotosiLibrary.SegurosDbContext;
 
 namespace SegurosPotosiLibrary.Models
 {
-    public class Author : IAuthor
+    public class Author : Person, IAuthor
     {
         public int AuthorId { get; set; }
-        public string AuthorDNI { get; set; }
-        public string Name { get; set; }
-        public string Lastname { get; set; }
         public IEnumerable<Book> Books { get; set; }
 
         private SegurosPotosiContext _context;
 
         public bool Add(Author author)
         {
-            var userFound = _context.Authors.Where(x => x.AuthorDNI == author.AuthorDNI).Count();
+            var userFound = _context.Authors.Where(x => x.DNI == author.DNI).Count();
             if (userFound > 0) return false;
             _context.Add(author);
             return _context.SaveChanges() > 0;
@@ -25,7 +23,7 @@ namespace SegurosPotosiLibrary.Models
 
         public bool Update(Author author)
         {
-            var authorFound = _context.Authors.Where(x => x.AuthorDNI == author.AuthorDNI).FirstOrDefault();
+            var authorFound = _context.Authors.Where(x => x.DNI == author.DNI).FirstOrDefault();
             if (authorFound != null)
             {
                 authorFound.Name = author.Name;
@@ -38,7 +36,7 @@ namespace SegurosPotosiLibrary.Models
 
         public bool Delete(string authorDNI)
         {
-            var author = _context.Authors.Where(x => x.AuthorDNI == authorDNI).FirstOrDefault();
+            var author = _context.Authors.Where(x => x.DNI == authorDNI).FirstOrDefault();
             if (author != null) return false;
             _context.Authors.Remove(author);
             return author != null;

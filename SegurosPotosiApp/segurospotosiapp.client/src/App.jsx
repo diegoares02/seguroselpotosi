@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Login from './login/LoginComponent';
 import NavBarComponent from './navbar/NavBarComponent';
+import './App.css';
+import Author from './pages/Author';
+import Home from './pages/Home';
 
 function App() {
   const [show, setShow] = useState(false);
@@ -17,7 +21,13 @@ function App() {
 
   return (
     <Container fluid>
-      {navbar}
+      <BrowserRouter>
+        {navbar}
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/authors" element={<Author />}></Route>
+        </Routes>
+      </BrowserRouter>
       {login}
     </Container>
   );

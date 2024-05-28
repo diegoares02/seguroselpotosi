@@ -85,6 +85,11 @@ namespace SegurosPotosiApp.Server
                 endpoints.MapControllers();
             });
 
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<SegurosPotosiContext>();
+                DataSeed.Seed(context);
+            }
         }
     }
 }
